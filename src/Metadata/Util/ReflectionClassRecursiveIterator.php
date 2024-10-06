@@ -28,7 +28,23 @@ final class ReflectionClassRecursiveIterator
 
     public static function getReflectionClassesFromDirectories(array $directories): \Iterator
     {
+        $isComposerRunning = !!getenv('COMPOSER_BINARY');
+
         foreach ($directories as $path) {
+            $directoryIterator = null;
+
+            if ($isComposerRunning !== false) {
+                try {
+                    $directoryIterator = new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS);
+                }
+                catch (\Throwable $exception) {
+
+                    // output warning in composer log stack -> "{$path} does not exist"
+
+                    continue;
+                }
+            }
+
             $iterator = new \RegexIterator(
                 new \RecursiveIteratorIterator(
                     new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS),
