@@ -47,7 +47,7 @@ final class ReflectionClassRecursiveIterator
 
             $iterator = new \RegexIterator(
                 new \RecursiveIteratorIterator(
-                    new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS),
+                    $directoryIterator ?? new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS),
                     \RecursiveIteratorIterator::LEAVES_ONLY
                 ),
                 '/^.+\.php$/i',
